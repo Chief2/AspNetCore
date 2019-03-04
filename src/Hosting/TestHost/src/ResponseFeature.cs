@@ -12,16 +12,13 @@ namespace Microsoft.AspNetCore.TestHost
 {
     internal class ResponseFeature : IHttpResponseFeature
     {
-        private Stream _internalStream;
-        private HttpContext _context;
-
         private Func<Task> _responseStartingAsync = () => Task.FromResult(true);
         private Func<Task> _responseCompletedAsync = () => Task.FromResult(true);
         private HeaderDictionary _headers = new HeaderDictionary();
         private int _statusCode;
         private string _reasonPhrase;
 
-        public ResponseFeature(HttpContext context)
+        public ResponseFeature()
         {
             Headers = _headers;
             Body = new MemoryStream();
@@ -29,7 +26,6 @@ namespace Microsoft.AspNetCore.TestHost
             // 200 is the default status code all the way down to the host, so we set it
             // here to be consistent with the rest of the hosts when writing tests.
             StatusCode = 200;
-            _context = context;
         }
 
         public int StatusCode
@@ -68,14 +64,7 @@ namespace Microsoft.AspNetCore.TestHost
 
         public Stream Body
         {
-            get
-            {
-                return _internalStream;
-            }
-            set
-            {
-                _internalStream = value;
-            }
+            get; set;
         }
 
         public bool HasStarted { get; set; }

@@ -17,7 +17,7 @@ namespace Microsoft.AspNetCore.Http.Internal
         private readonly static Func<IFeatureCollection, IHttpResponseFeature> _nullResponseFeature = f => null;
         private readonly static Func<IFeatureCollection, IHttpResponseStartFeature> _nullResponseStartFeature = f => null;
         private readonly static Func<IFeatureCollection, IResponseCookiesFeature> _newResponseCookiesFeature = f => new ResponseCookiesFeature(f);
-        private readonly static Func<IFeatureCollection, IResponseBodyPipeFeature> _newResponseBodyPipeFeature = context => null;
+        private readonly static Func<IFeatureCollection, IResponseBodyPipeFeature> _newResponseBodyPipeFeature = context => throw new Exception();
 
         private readonly DefaultHttpContext _context;
         private FeatureReferences<FeatureInterfaces> _features;

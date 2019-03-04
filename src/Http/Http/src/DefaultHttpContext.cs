@@ -34,8 +34,8 @@ namespace Microsoft.AspNetCore.Http
         public DefaultHttpContext()
             : this(new FeatureCollection())
         {
-            var requestFeature = new HttpRequestFeature();
-            var responseFeature = new HttpResponseFeature();
+            var requestFeature = new HttpRequestFeature(this);
+            var responseFeature = new HttpResponseFeature(this);
             Features.Set<IHttpRequestFeature>(requestFeature);
             Features.Set<IRequestBodyPipeFeature>(requestFeature);
             Features.Set<IHttpResponseFeature>(responseFeature);

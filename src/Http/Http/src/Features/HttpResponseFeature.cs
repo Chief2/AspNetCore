@@ -5,19 +5,23 @@ using System;
 using System.IO;
 using System.IO.Pipelines;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.Internal;
 
 namespace Microsoft.AspNetCore.Http.Features
 {
     public class HttpResponseFeature : IHttpResponseFeature, IResponseBodyPipeFeature
     {
-        internal Stream _internalStream;
-        internal PipeWriter _internalPipeWriter;
+        private Stream _internalStream;
+        private HttpContext _context;
+        private PipeWriter _internalPipeWriter;
 
-        public HttpResponseFeature()
+        public HttpResponseFeature(HttpContext context)
         {
             StatusCode = 200;
             Headers = new HeaderDictionary();
             _internalStream = Stream.Null;
+            _internalPipeWriter = new NullPipeWriter();
+            _context = context;
         }
 
         public int StatusCode { get; set; }
@@ -35,8 +39,9 @@ namespace Microsoft.AspNetCore.Http.Features
             set
             {
                 _internalStream = value;
-                var responsePipeWriter = new StreamPipeWriter(_internalStream);
-                _internalPipeWriter = responsePipeWriter;
+                var streamPipeWriter = new StreamPipeWriter(_internalStream);
+                _internalPipeWriter = streamPipeWriter;
+                _context.Response.RegisterForDispose(streamPipeWriter);
             }
         }
 

@@ -156,13 +156,14 @@ namespace Microsoft.AspNetCore.Http
         public void UpdateFeatures_ClearsCachedFeatures()
         {
             var features = new FeatureCollection();
-            features.Set<IHttpRequestFeature>(new HttpRequestFeature());
-            features.Set<IHttpResponseFeature>(new HttpResponseFeature());
+            var context = new DefaultHttpContext(features);
+
+            features.Set<IHttpRequestFeature>(new HttpRequestFeature(context));
+            features.Set<IHttpResponseFeature>(new HttpResponseFeature(context));
             features.Set<IHttpWebSocketFeature>(new TestHttpWebSocketFeature());
             features.Set<IHttpResponseStartFeature>(new MockHttpResponseStartFeature());
 
             // FeatureCollection is set. all cached interfaces are null.
-            var context = new DefaultHttpContext(features);
             TestAllCachedFeaturesAreNull(context, features);
             Assert.Equal(4, features.Count());
 
@@ -177,8 +178,8 @@ namespace Microsoft.AspNetCore.Http
 
 
             var newFeatures = new FeatureCollection();
-            newFeatures.Set<IHttpRequestFeature>(new HttpRequestFeature());
-            newFeatures.Set<IHttpResponseFeature>(new HttpResponseFeature());
+            newFeatures.Set<IHttpRequestFeature>(new HttpRequestFeature(context));
+            newFeatures.Set<IHttpResponseFeature>(new HttpResponseFeature(context));
             newFeatures.Set<IHttpWebSocketFeature>(new TestHttpWebSocketFeature());
             newFeatures.Set<IHttpResponseStartFeature>(new MockHttpResponseStartFeature());
 

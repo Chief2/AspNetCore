@@ -3,18 +3,22 @@
 
 using System.IO;
 using System.IO.Pipelines;
+using Microsoft.AspNetCore.Http.Internal;
 
 namespace Microsoft.AspNetCore.Http.Features
 {
     public class HttpRequestFeature : IHttpRequestFeature, IRequestBodyPipeFeature
     {
-        internal Stream _internalStream;
-        internal PipeReader _internalPipeReader;
+        private Stream _internalStream;
+        private PipeReader _internalPipeReader;
+        private HttpContext _context;
 
-        public HttpRequestFeature()
+        public HttpRequestFeature(HttpContext context)
         {
+            _context = context;
             Headers = new HeaderDictionary();
             _internalStream = Stream.Null;
+            _internalPipeReader = new NullPipeReader();
             Protocol = string.Empty;
             Scheme = string.Empty;
             Method = string.Empty;
@@ -32,6 +36,7 @@ namespace Microsoft.AspNetCore.Http.Features
         public string QueryString { get; set; }
         public string RawTarget { get; set; }
 
+
         public IHeaderDictionary Headers { get; set; }
 
         public Stream Body
@@ -43,7 +48,9 @@ namespace Microsoft.AspNetCore.Http.Features
             set
             {
                 _internalStream = value;
-                _internalPipeReader = new StreamPipeReader(_internalStream);
+                var streamPipeReader = new StreamPipeReader(_internalStream);
+                _internalPipeReader = streamPipeReader;
+                _context.Response.RegisterForDispose(streamPipeReader);
             }
         }
 

@@ -65,6 +65,15 @@ namespace Microsoft.AspNetCore.Http.Internal
         }
 
         [Fact]
+        public void Body_CanGet()
+        {
+            var response = new DefaultHttpContext();
+            var bodyPipe = response.Response.Body;
+
+            Assert.NotNull(bodyPipe);
+        }
+
+        [Fact]
         public void BodyPipe_CanGet()
         {
             var response = new DefaultHttpContext();

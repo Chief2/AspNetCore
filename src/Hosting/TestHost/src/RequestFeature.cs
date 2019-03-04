@@ -10,10 +10,7 @@ namespace Microsoft.AspNetCore.TestHost
 {
     internal class RequestFeature : IHttpRequestFeature
     {
-        private Stream _internalStream;
-        private HttpContext _context;
-
-        public RequestFeature(HttpContext context)
+        public RequestFeature()
         {
             Body = Stream.Null;
             Headers = new HeaderDictionary();
@@ -23,19 +20,11 @@ namespace Microsoft.AspNetCore.TestHost
             Protocol = "HTTP/1.1";
             QueryString = "";
             Scheme = "http";
-            _context = context;
         }
 
         public Stream Body
         {
-            get
-            {
-                return _internalStream;
-            }
-            set
-            {
-                _internalStream = value;
-            }
+            get; set;
         }
 
         public IHeaderDictionary Headers { get; set; }
