@@ -3,7 +3,6 @@
 
 using System.IO;
 using System.IO.Pipelines;
-using Microsoft.AspNetCore.Http.Internal;
 
 namespace Microsoft.AspNetCore.Http.Features
 {

@@ -5,7 +5,6 @@ using System;
 using System.IO;
 using System.IO.Pipelines;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http.Internal;
 
 namespace Microsoft.AspNetCore.Http.Features
 {
@@ -17,6 +16,7 @@ namespace Microsoft.AspNetCore.Http.Features
 
         public HttpResponseFeature(HttpContext context)
         {
+            // _context = context ?? throw new ArgumentNullException(nameof(context));
             StatusCode = 200;
             Headers = new HeaderDictionary();
             _internalStream = Stream.Null;

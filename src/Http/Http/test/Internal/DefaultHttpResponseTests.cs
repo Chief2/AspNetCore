@@ -105,13 +105,6 @@ namespace Microsoft.AspNetCore.Http.Internal
         }
 
         [Fact]
-        public void BodyPipe_ThrowsWhenSettingNull()
-        {
-            var context = new DefaultHttpContext();
-            Assert.Throws<ArgumentNullException>(() => context.Response.BodyPipe = null);
-        }
-
-        [Fact]
         public async Task ResponseStart_CallsFeatureIfSet()
         {
             var features = new FeatureCollection();

@@ -18,7 +18,7 @@ namespace Microsoft.AspNetCore.TestHost
         
         private TaskCompletionSource<HttpContext> _responseTcs = new TaskCompletionSource<HttpContext>(TaskCreationOptions.RunContinuationsAsynchronously);
         private ResponseStream _responseStream;
-        private ResponseFeature _responseFeature = new ResponseFeature();
+        private ResponseFeature _responseFeature;
         private CancellationTokenSource _requestAbortedSource = new CancellationTokenSource();
         private bool _pipelineFinished;
         private Context _testContext;
@@ -33,8 +33,11 @@ namespace Microsoft.AspNetCore.TestHost
             request.Protocol = "HTTP/1.1";
             request.Method = HttpMethods.Get;
 
+            _responseFeature = new ResponseFeature(_httpContext);
             _httpContext.Features.Set<IHttpBodyControlFeature>(this);
             _httpContext.Features.Set<IHttpResponseFeature>(_responseFeature);
+            _httpContext.Features.Set<IResponseBodyPipeFeature>(_responseFeature);
+
             var requestLifetimeFeature = new HttpRequestLifetimeFeature();
             requestLifetimeFeature.RequestAborted = _requestAbortedSource.Token;
             _httpContext.Features.Set<IHttpRequestLifetimeFeature>(requestLifetimeFeature);

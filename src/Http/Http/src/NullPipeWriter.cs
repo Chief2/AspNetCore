@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Microsoft.AspNetCore.Http.Internal
+namespace System.IO.Pipelines
 {
-    internal class NullPipeWriter : PipeWriter
+    public class NullPipeWriter : PipeWriter
     {
         public override void Advance(int bytes)
         {
